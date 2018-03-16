@@ -16,7 +16,6 @@ CREATE TABLE accounts (
   account_role_id BIGINT,
   CONSTRAINT accounts_account_roles_id_fk FOREIGN KEY (account_role_id) REFERENCES account_roles (id)
 );
-CREATE UNIQUE INDEX accounts_full_name_uindex ON accounts (full_name);
 CREATE UNIQUE INDEX accounts_external_id_uindex ON accounts (external_id);
 
 -- member_privileges table
@@ -92,7 +91,7 @@ CREATE INDEX tasks_name_index ON tasks (name);
 
 -- tags table
 CREATE TABLE tags (
-  id SERIAL PRIMARY KEY NOT NULL,
+  id BIGSERIAL PRIMARY KEY NOT NULL,
   name VARCHAR(120) NOT NULL,
   color VARCHAR(6) NOT NULL,
   project_id BIGINT NOT NULL,
