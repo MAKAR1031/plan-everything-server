@@ -20,6 +20,12 @@ public class TaskStep {
     @Column(nullable = false)
     private boolean completed;
 
+    @Column(nullable = false)
+    private boolean needReport;
+
+    @Lob
+    private String report;
+
     @ManyToOne
     @JoinColumn(name = "task_id", nullable = false)
     private Task task;

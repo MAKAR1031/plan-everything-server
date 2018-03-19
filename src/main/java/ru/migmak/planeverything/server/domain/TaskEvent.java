@@ -23,6 +23,10 @@ public class TaskEvent {
     @Temporal(TemporalType.TIMESTAMP)
     private Date time;
 
+    @ManyToOne
+    @JoinColumn(name = "event_type_id", nullable = false)
+    private EventType type;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "task_id", nullable = false)
     private Task task;

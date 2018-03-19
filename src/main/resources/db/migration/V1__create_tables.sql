@@ -115,6 +115,8 @@ CREATE TABLE task_steps (
   id BIGSERIAL NOT NULL,
   name VARCHAR(120) NOT NULL,
   completed BOOLEAN DEFAULT FALSE  NOT NULL,
+  need_report BOOLEAN DEFAULT FALSE NOT NULL,
+  report TEXT,
   task_id BIGINT NOT NULL,
   CONSTRAINT task_steps_tasks_id_fk FOREIGN KEY (task_id) REFERENCES tasks (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
@@ -131,13 +133,22 @@ CREATE TABLE criteria (
 );
 CREATE INDEX criteria_name_index ON criteria (name);
 
+-- event_types table
+CREATE TABLE event_types (
+  id BIGSERIAL PRIMARY KEY NOT NULL,
+  code VARCHAR(10) NOT NULL
+);
+CREATE UNIQUE INDEX event_types_code_uindex ON event_types (code);
+
 -- task_events table
 CREATE TABLE task_events (
   id BIGSERIAL PRIMARY KEY NOT NULL,
   name VARCHAR(200) NOT NULL,
   event_time TIMESTAMP NOT NULL,
+  event_type_id BIGINT NOT NULL,
   task_id BIGINT NOT NULL,
-  member_id BIGINT,
+  member_id BIGINT NOT NULL,
+  CONSTRAINT task_events_event_type_id_fk FOREIGN KEY (event_type_id) REFERENCES event_types (id),
   CONSTRAINT task_events_tasks_id_fk FOREIGN KEY (task_id) REFERENCES tasks (id) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT task_events_members_id_fk FOREIGN KEY (member_id) REFERENCES members (id) ON DELETE SET NULL ON UPDATE CASCADE
 );
