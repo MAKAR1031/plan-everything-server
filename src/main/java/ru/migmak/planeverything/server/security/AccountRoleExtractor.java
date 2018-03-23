@@ -2,6 +2,7 @@ package ru.migmak.planeverything.server.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.AuthoritiesExtractor;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.stereotype.Component;
@@ -37,6 +38,9 @@ public class AccountRoleExtractor implements AuthoritiesExtractor {
             accountRepository.save(newAccount);
             return newAccount;
         });
+        if (account.isBlocked()) {
+            throw new BadCredentialsException("Account blocked");
+        }
         return AuthorityUtils.commaSeparatedStringToAuthorityList(account.getRole().getCode());
     }
 
