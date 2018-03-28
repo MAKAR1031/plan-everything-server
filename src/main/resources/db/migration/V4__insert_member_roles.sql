@@ -23,10 +23,10 @@ BEGIN
   INSERT INTO member_privileges (name, code) VALUES ('Управление задачами', 'MANAGE_TASKS') RETURNING id INTO manage_tasks_id;
   INSERT INTO member_privileges (name, code) VALUES ('Исполнитель', 'EXECUTOR') RETURNING id INTO executor_id;
 
-  INSERT INTO member_roles (name) VALUES ('Менеджер проекта') RETURNING id INTO project_manager_id;
-  INSERT INTO member_roles (name) VALUES ('Администратор проекта') RETURNING id INTO project_admin_id;
-  INSERT INTO member_roles (name) VALUES ('Менеджер задач') RETURNING id INTO tasks_manager_id;
-  INSERT INTO member_roles (name) VALUES ('Исполнитель проекта') RETURNING id INTO executor_role_id;
+  INSERT INTO member_roles (name, code) VALUES ('Менеджер проекта', 'PROJECT_MANAGER') RETURNING id INTO project_manager_id;
+  INSERT INTO member_roles (name, code) VALUES ('Администратор проекта', 'PROJECT_ADMIN') RETURNING id INTO project_admin_id;
+  INSERT INTO member_roles (name, code) VALUES ('Менеджер задач', 'PROJECT_TASK_MANAGER') RETURNING id INTO tasks_manager_id;
+  INSERT INTO member_roles (name, code) VALUES ('Исполнитель проекта', 'PROJECT_EXECUTOR') RETURNING id INTO executor_role_id;
 
   INSERT INTO member_role_privilege (member_role_id, member_privilege_id) VALUES
     (project_manager_id, close_project_id),

@@ -18,6 +18,9 @@ public class MemberRole {
     @Column(nullable = false, unique = true, length = 80)
     private String name;
 
+    @Column(nullable = false, unique = true, length = 20)
+    private String code;
+
     @ManyToMany
     @JoinTable(
             name = "member_role_privilege",

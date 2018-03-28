@@ -30,9 +30,11 @@ CREATE UNIQUE INDEX member_privileges_code_uindex ON member_privileges (code);
 -- member_roles table
 CREATE TABLE member_roles (
     id BIGSERIAL PRIMARY KEY NOT NULL,
-    name VARCHAR(80) NOT NULL
+    name VARCHAR(80) NOT NULL,
+    code VARCHAR(20) NOT NULL
 );
 CREATE UNIQUE INDEX member_roles_name_uindex ON member_roles (name);
+CREATE UNIQUE INDEX member_roles_code_uindex ON member_roles (code);
 
 -- member_role_privilege table
 CREATE TABLE member_role_privilege (

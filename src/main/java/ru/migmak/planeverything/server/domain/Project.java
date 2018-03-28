@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -41,4 +42,11 @@ public class Project {
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "project")
     private List<Tag> tags;
+
+    public void addMember(ProjectMember member) {
+        if (this.members == null) {
+            members = new ArrayList<>();
+        }
+        members.add(member);
+    }
 }

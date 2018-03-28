@@ -8,5 +8,5 @@ import java.util.Optional;
 
 @RepositoryRestResource(exported = false)
 public interface MemberRoleRepository extends CrudRepository<MemberRole, Long> {
-    Optional<MemberRole> findByName(String name);
+    Optional<MemberRole> findByCode(String code);
 }
