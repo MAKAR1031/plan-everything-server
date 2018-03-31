@@ -9,6 +9,6 @@ import java.util.Optional;
 public interface AccountRepository extends CrudRepository<Account, Long> {
     Optional<Account> findAccountByLogin(String login);
 
-    @Query("select a from Account a where a.externalId = :#{principal.username}")
+    @Query("select a from Account a where a.login = :#{principal.username}")
     Optional<Account> findCurrentAccount();
 }
