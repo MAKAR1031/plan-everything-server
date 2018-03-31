@@ -7,8 +7,8 @@ import ru.migmak.planeverything.server.domain.Account;
 import java.util.Optional;
 
 public interface AccountRepository extends CrudRepository<Account, Long> {
-    Optional<Account> findAccountByExternalId(String externalId);
+    Optional<Account> findAccountByLogin(String login);
 
-    @Query("select a from Account a where a.externalId = :#{principal}")
+    @Query("select a from Account a where a.externalId = :#{principal.username}")
     Optional<Account> findCurrentAccount();
 }

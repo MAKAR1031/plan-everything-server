@@ -1,5 +1,6 @@
 package ru.migmak.planeverything.server.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,11 +15,18 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true, nullable = false, length = 50)
+    private String login;
+
+    @JsonIgnore
+    @Column(nullable = false)
+    private String password;
+
+    @Column(unique = true, nullable = false)
+    private String email;
+
     @Column(nullable = false)
     private String fullName;
-
-    @Column(nullable = false, unique = true)
-    private String externalId;
 
     @Column(nullable = false)
     private boolean blocked;
