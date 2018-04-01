@@ -14,3 +14,9 @@ security:
   admin:
     fullName: Administrator full name
     email: Administrator email
+oauth:
+  resourceId: resource id
+  client:
+    web:
+      id: client id
+      secret: client secret bcrypt hash

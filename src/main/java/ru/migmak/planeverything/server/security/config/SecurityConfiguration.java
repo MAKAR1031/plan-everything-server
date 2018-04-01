@@ -11,6 +11,7 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.data.repository.query.SecurityEvaluationContextExtension;
 import ru.migmak.planeverything.server.service.AccountDetailsService;
@@ -22,7 +23,7 @@ import java.io.IOException;
 
 @Profile("!dev")
 @Configuration
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final AccountDetailsService accountDetailsService;
@@ -35,23 +36,21 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/login").permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .formLogin().disable();
+            .antMatchers("/register").permitAll()
+            .anyRequest().authenticated()
+            .and()
+            .formLogin().disable()
+            .csrf().disable();
     }
 
     @Bean
     FilterRegistrationBean<Filter> corsFilter(@Value("${cors.origin}") String origin) {
         return new FilterRegistrationBean<>(new Filter() {
-            public void doFilter(
-                    ServletRequest req, ServletResponse res,
-                    FilterChain chain
-            ) throws IOException, ServletException {
+            public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
+                    throws IOException, ServletException {
                 HttpServletRequest request = (HttpServletRequest) req;
                 HttpServletResponse response = (HttpServletResponse) res;
                 String method = request.getMethod();
-                // this origin value could just as easily have come from a database
                 response.setHeader("Access-Control-Allow-Origin", origin);
                 response.setHeader(
                         "Access-Control-Allow-Methods",
@@ -93,16 +92,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new PasswordEncoder() {
-            @Override
-            public String encode(CharSequence rawPassword) {
-                return (String) rawPassword;
-            }
-
-            @Override
-            public boolean matches(CharSequence rawPassword, String encodedPassword) {
-                return rawPassword.equals(encodedPassword);
-            }
-        };
+        return new BCryptPasswordEncoder();
     }
 }
