@@ -25,4 +25,8 @@ public class ProjectMember {
     @ManyToOne
     @JoinColumn(name = "member_role_id", nullable = false)
     private MemberRole role;
+
+    public boolean hasPrivilege(String code) {
+        return role.getPrivilegeList().stream().anyMatch(privilege -> privilege.getCode().equals(code));
+    }
 }

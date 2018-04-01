@@ -3,6 +3,7 @@ package ru.migmak.planeverything.server.domain;
 
 import lombok.Getter;
 import lombok.Setter;
+import ru.migmak.planeverything.server.exception.NotFoundException;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -48,5 +49,13 @@ public class Project {
             members = new ArrayList<>();
         }
         members.add(member);
+    }
+
+    public ProjectMember findMemberByAccountId(Long id) {
+        return this.members
+                .stream()
+                .filter(member -> id.equals(member.getAccount().getId()))
+                .findFirst()
+                .orElseThrow(NotFoundException::new);
     }
 }
