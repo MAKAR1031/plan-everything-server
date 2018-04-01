@@ -4,10 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.PersistentEntityResource;
 import org.springframework.data.rest.webmvc.PersistentEntityResourceAssembler;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import ru.migmak.planeverything.server.ro.ProjectRo;
 import ru.migmak.planeverything.server.service.ProjectsService;
 
@@ -29,4 +26,9 @@ public class ProjectsController {
         return assembler.toFullResource(projectsService.create(project));
     }
 
+    @RequestMapping(path = "/{id}/close", method = RequestMethod.PATCH)
+    @ResponseBody
+    public PersistentEntityResource close(@PathVariable("id") Long id, PersistentEntityResourceAssembler assembler) {
+        return assembler.toFullResource(projectsService.close(id));
+    }
 }
