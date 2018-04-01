@@ -21,9 +21,8 @@ public class ProjectsController {
 
     @RequestMapping(path = "/create", method = RequestMethod.POST)
     @ResponseBody
-    public PersistentEntityResource create(@RequestBody ProjectRo project,
-                                           PersistentEntityResourceAssembler assembler) {
-        return assembler.toFullResource(projectsService.create(project));
+    public PersistentEntityResource create(@RequestBody ProjectRo body, PersistentEntityResourceAssembler assembler) {
+        return assembler.toFullResource(projectsService.create(body.getName(), body.getDescription()));
     }
 
     @RequestMapping(path = "/{id}/close", method = RequestMethod.PATCH)

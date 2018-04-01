@@ -15,10 +15,8 @@ import ru.migmak.planeverything.server.exception.ProjectCreateException;
 import ru.migmak.planeverything.server.repository.AccountRepository;
 import ru.migmak.planeverything.server.repository.MemberRoleRepository;
 import ru.migmak.planeverything.server.repository.ProjectRepository;
-import ru.migmak.planeverything.server.ro.ProjectRo;
 
 import java.util.Date;
-import java.util.List;
 
 import static ru.migmak.planeverything.server.domain.enums.MemberRoleCode.PROJECT_MANAGER;
 
@@ -40,10 +38,10 @@ public class ProjectsService {
         this.memberRoleRepository = memberRoleRepository;
     }
 
-    public Project create(ProjectRo projectRo) {
+    public Project create(String name, String description) {
         Project project = new Project();
-        project.setName(projectRo.getName());
-        project.setDescription(projectRo.getDescription());
+        project.setName(name);
+        project.setDescription(description);
         project.setOpened(true);
         project.setCreateDate(new Date());
         Account author = accountRepository.findCurrentAccount().orElseThrow(ProjectCreateException::new);
