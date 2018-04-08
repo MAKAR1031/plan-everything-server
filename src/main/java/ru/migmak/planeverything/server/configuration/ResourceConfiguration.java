@@ -1,4 +1,4 @@
-package ru.migmak.planeverything.server.security.config;
+package ru.migmak.planeverything.server.configuration;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -16,9 +16,17 @@ public class ResourceConfiguration extends ResourceServerConfigurerAdapter {
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        http.requestMatchers().antMatchers("/**")
+        // @formatter:off
+        http.formLogin().disable()
+            .csrf().disable()
+            .authorizeRequests()
+                .antMatchers("/register")
+                .permitAll()
             .and()
-            .authorizeRequests().anyRequest().access("#oauth2.hasScope('all')");
+            .authorizeRequests()
+                .antMatchers("/**")
+                .access("#oauth2.hasScope('all')");
+        // @formatter:on
     }
 
     @Override
