@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -44,4 +45,11 @@ public class Task {
 
     @ManyToMany(mappedBy = "project")
     private List<Tag> tags;
+
+    public void addEvent(TaskEvent event) {
+        if (events == null) {
+            events = new ArrayList<>();
+        }
+        events.add(event);
+    }
 }

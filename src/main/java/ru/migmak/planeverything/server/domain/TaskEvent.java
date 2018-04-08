@@ -1,6 +1,7 @@
 package ru.migmak.planeverything.server.domain;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -8,6 +9,7 @@ import java.util.Date;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "task_events")
 public class TaskEvent {
@@ -34,4 +36,12 @@ public class TaskEvent {
     @ManyToOne
     @JoinColumn(name = "member_id", nullable = false)
     private ProjectMember initiator;
+
+    public TaskEvent(String name, EventType type, Task task, ProjectMember initiator) {
+        this.time = new Date();
+        this.name = name;
+        this.type = type;
+        this.task = task;
+        this.initiator = initiator;
+    }
 }

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import ru.migmak.planeverything.server.domain.Account;
 import ru.migmak.planeverything.server.domain.Project;
 import ru.migmak.planeverything.server.domain.ProjectMember;
-import ru.migmak.planeverything.server.exception.ProjectCreateException;
+import ru.migmak.planeverything.server.exception.ServiceException;
 import ru.migmak.planeverything.server.repository.AccountRepository;
 import ru.migmak.planeverything.server.repository.MemberRoleRepository;
 
@@ -40,14 +40,14 @@ public class ProjectHandler {
         project.setOpened(true);
         Account author = accountRepository
                 .findCurrentAccount()
-                .orElseThrow(() -> new ProjectCreateException("Current account not found"));
+                .orElseThrow(() -> new ServiceException("Current account not found"));
         project.setAuthor(author);
         ProjectMember member = new ProjectMember();
         member.setAccount(author);
         member.setProject(project);
         member.setRole(memberRoleRepository
                 .findByCode(PROJECT_MANAGER.name())
-                .orElseThrow(() -> new ProjectCreateException("Cannot find project manager role")));
+                .orElseThrow(() -> new ServiceException("Cannot find project manager role")));
         project.addMember(member);
     }
 }

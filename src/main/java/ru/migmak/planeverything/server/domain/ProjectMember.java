@@ -2,6 +2,7 @@ package ru.migmak.planeverything.server.domain;
 
 import lombok.Getter;
 import lombok.Setter;
+import ru.migmak.planeverything.server.domain.enums.PrivilegeCode;
 
 import javax.persistence.*;
 
@@ -26,7 +27,7 @@ public class ProjectMember {
     @JoinColumn(name = "member_role_id", nullable = false)
     private MemberRole role;
 
-    public boolean hasPrivilege(String code) {
-        return role.getPrivilegeList().stream().anyMatch(privilege -> privilege.getCode().equals(code));
+    public boolean hasPrivilege(PrivilegeCode code) {
+        return role.getPrivilegeList().stream().anyMatch(privilege -> privilege.getCode().equals(code.name()));
     }
 }
