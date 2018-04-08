@@ -26,17 +26,17 @@ import static ru.migmak.planeverything.server.domain.enums.TaskStatusCode.CREATE
 public class TaskHandler {
 
     private final AccountRepository accountRepository;
-    private final TaskStatusRepository taskStatusRepository;
+    private final TaskStatusRepository statusRepository;
     private final EventTypeRepository eventTypeRepository;
 
     @Autowired
     public TaskHandler(
             AccountRepository accountRepository,
-            TaskStatusRepository taskStatusRepository,
+            TaskStatusRepository statusRepository,
             EventTypeRepository eventTypeRepository
     ) {
         this.accountRepository = accountRepository;
-        this.taskStatusRepository = taskStatusRepository;
+        this.statusRepository = statusRepository;
         this.eventTypeRepository = eventTypeRepository;
     }
 
@@ -48,7 +48,7 @@ public class TaskHandler {
         if (project == null) {
             return;
         }
-        TaskStatus createdStatus = taskStatusRepository.findByCode(CREATED.name())
+        TaskStatus createdStatus = statusRepository.findByCode(CREATED.name())
                 .orElseThrow(() -> new ServiceException("Status 'CREATE' not found"));
         task.setStatus(createdStatus);
         ProjectMember author = getEventInitiator(project);

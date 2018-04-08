@@ -12,12 +12,12 @@ import ru.migmak.planeverything.server.service.AccountService;
 
 @RepositoryRestController
 @RequestMapping("/accounts/{id}")
-public class AccountController {
+public class AccountsController {
 
     private final AccountService accountService;
 
     @Autowired
-    public AccountController(AccountService accountService) {
+    public AccountsController(AccountService accountService) {
         this.accountService = accountService;
     }
 
