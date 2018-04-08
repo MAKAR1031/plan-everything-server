@@ -3,6 +3,9 @@ package ru.migmak.planeverything.server.exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
-public class ProjectCreateException extends RuntimeException{
+@ResponseStatus(HttpStatus.BAD_REQUEST)
+public class ProjectCreateException extends RuntimeException {
+    public ProjectCreateException(String message) {
+        super(message);
+    }
 }
