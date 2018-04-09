@@ -16,7 +16,7 @@ public class TasksController {
         this.tasksService = tasksService;
     }
 
-    @RequestMapping(path = "/assign", method = RequestMethod.PUT)
+    @PutMapping("/assign")
     @ResponseBody
     public PersistentEntityResource assign(
             @PathVariable("id") Long taskId,

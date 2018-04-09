@@ -5,8 +5,8 @@ import org.springframework.data.rest.webmvc.PersistentEntityResource;
 import org.springframework.data.rest.webmvc.PersistentEntityResourceAssembler;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import ru.migmak.planeverything.server.service.AccountService;
 
@@ -21,13 +21,13 @@ public class AccountsController {
         this.accountService = accountService;
     }
 
-    @RequestMapping(path = "/block", method = RequestMethod.POST)
+    @PostMapping("/block")
     @ResponseBody
     public PersistentEntityResource block(@PathVariable("id") Long id, PersistentEntityResourceAssembler assembler) {
         return assembler.toFullResource(accountService.setBlocked(id, true));
     }
 
-    @RequestMapping(path = "/unblock", method = RequestMethod.POST)
+    @PostMapping("/unblock")
     @ResponseBody
     public PersistentEntityResource unblock(@PathVariable("id") Long id, PersistentEntityResourceAssembler assembler) {
         return assembler.toFullResource(accountService.setBlocked(id, false));
