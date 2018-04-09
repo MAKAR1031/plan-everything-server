@@ -1,6 +1,6 @@
 package ru.migmak.planeverything.server.runner;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,7 +14,7 @@ import ru.migmak.planeverything.server.repository.AccountRoleRepository;
 import static ru.migmak.planeverything.server.domain.enums.AccountRoleCode.ADMIN;
 
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class AdministratorAccountCreator implements CommandLineRunner {
 
     @Value("${security.admin.fullName}")

@@ -1,6 +1,6 @@
 package ru.migmak.planeverything.server.service;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.migmak.planeverything.server.domain.Tag;
@@ -12,7 +12,7 @@ import static ru.migmak.planeverything.server.domain.enums.PrivilegeCode.MANAGE_
 
 @Service
 @Transactional
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class TagsService {
 
     private final AccountRepository accountRepository;
