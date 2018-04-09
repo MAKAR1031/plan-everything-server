@@ -8,13 +8,14 @@ import ru.migmak.planeverything.server.domain.enums.TaskStatusCode;
 import ru.migmak.planeverything.server.exception.BadRequestException;
 import ru.migmak.planeverything.server.exception.NotFoundException;
 import ru.migmak.planeverything.server.exception.ServiceException;
-import ru.migmak.planeverything.server.repository.AccountRepository;
-import ru.migmak.planeverything.server.repository.EventTypeRepository;
-import ru.migmak.planeverything.server.repository.TaskRepository;
-import ru.migmak.planeverything.server.repository.TaskStatusRepository;
+import ru.migmak.planeverything.server.repository.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static ru.migmak.planeverything.server.domain.enums.EventTypeCode.UPDATE;
 import static ru.migmak.planeverything.server.domain.enums.TaskStatusCode.ASSIGNED;
+import static ru.migmak.planeverything.server.domain.enums.TaskStatusCode.COMPLETED;
 
 @Service
 @Transactional
@@ -24,6 +25,7 @@ public class TasksService {
     private final TaskRepository taskRepository;
     private final TaskStatusRepository statusRepository;
     private final EventTypeRepository eventTypeRepository;
+    private final TaskStepRepository taskStepRepository;
 
     public Task assign(Long id, Long memberId) {
         Task task = taskRepository.findById(id).orElseThrow(NotFoundException::new);
@@ -61,6 +63,39 @@ public class TasksService {
         TaskStatus status = getStatus(TaskStatusCode.IN_PROGRESS);
         task.setStatus(status);
         return taskRepository.save(task);
+    }
+
+    public TaskStep completeStep(Long id, String report) {
+        TaskStep step = taskStepRepository.findById(id).orElseThrow(NotFoundException::new);
+        Account currentAccount = getCurrentAccount();
+        ProjectMember initiator = step.getTask().getProject()
+                .getMembers()
+                .stream()
+                .filter(member -> member.getAccount().getId().equals(currentAccount.getId()))
+                .findAny()
+                .orElseThrow(() -> new BadRequestException("Task not assigned to current user"));
+        TaskEvent event = createUpdateEvent(step.getTask(), initiator, "Step complete");
+        step.getTask().addEvent(event);
+        List<Long> stepsIds = step.getTask()
+                .getSteps()
+                .stream()
+                .filter(s -> !s.isCompleted())
+                .map(TaskStep::getId)
+                .collect(Collectors.toList());
+        if ((stepsIds.size() == 1) && stepsIds.get(0).equals(id)) {
+            TaskStatus status = getStatus(COMPLETED);
+            step.getTask().setStatus(status);
+            TaskEvent completeEvent = createUpdateEvent(step.getTask(), initiator, "All steps complete");
+            step.getTask().addEvent(completeEvent);
+        }
+        step.setCompleted(true);
+        if (step.isNeedReport()) {
+            if (report == null || report.isEmpty()) {
+                throw new BadRequestException("A report should be submitted for this task");
+            }
+            step.setReport(report);
+        }
+        return taskStepRepository.save(step);
     }
 
     private TaskStatus getStatus(TaskStatusCode statusCode) {
