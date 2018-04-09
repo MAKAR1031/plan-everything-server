@@ -41,10 +41,13 @@ public class Task {
     private List<TaskStep> steps;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "task")
-    private List<TaskEvent> events;
+    private List<Criterion> criteria;
 
     @ManyToMany(mappedBy = "project")
     private List<Tag> tags;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "task")
+    private List<TaskEvent> events;
 
     public void addEvent(TaskEvent event) {
         if (events == null) {
