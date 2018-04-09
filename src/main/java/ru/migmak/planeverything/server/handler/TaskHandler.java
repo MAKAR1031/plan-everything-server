@@ -82,7 +82,7 @@ public class TaskHandler {
     }
 
     private void checkEditableStatus(Task task) {
-        if (!task.getStatus().isCreated()) {
+        if (task.getStatus().isEditable()) {
             throw new BadRequestException("The task can not be edited or deleted in this status");
         }
     }

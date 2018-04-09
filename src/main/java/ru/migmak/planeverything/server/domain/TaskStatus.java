@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
+import static ru.migmak.planeverything.server.domain.enums.TaskStatusCode.COMPLETED;
 import static ru.migmak.planeverything.server.domain.enums.TaskStatusCode.CREATED;
 
 @Getter
@@ -22,7 +23,11 @@ public class TaskStatus {
     @Column(nullable = false, unique = true, length = 20)
     private String code;
 
-    public boolean isCreated() {
-        return CREATED.name().equals(code);
+    public boolean isEditable() {
+        return !CREATED.name().equals(code);
+    }
+
+    public boolean isCompleted() {
+        return COMPLETED.name().equals(code);
     }
 }
