@@ -1,6 +1,6 @@
 package ru.migmak.planeverything.server.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,15 +11,10 @@ import ru.migmak.planeverything.server.domain.Account;
 import ru.migmak.planeverything.server.repository.AccountRepository;
 
 @Service
-
+@RequiredArgsConstructor
 public class AccountDetailsService implements UserDetailsService {
 
     private final AccountRepository repository;
-
-    @Autowired
-    public AccountDetailsService(AccountRepository repository) {
-        this.repository = repository;
-    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

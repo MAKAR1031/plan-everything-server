@@ -1,6 +1,6 @@
 package ru.migmak.planeverything.server.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.migmak.planeverything.server.domain.Tag;
@@ -12,14 +12,10 @@ import static ru.migmak.planeverything.server.domain.enums.PrivilegeCode.MANAGE_
 
 @Service
 @Transactional
+@AllArgsConstructor
 public class TagsService {
 
     private final AccountRepository accountRepository;
-
-    @Autowired
-    public TagsService(AccountRepository accountRepository) {
-        this.accountRepository = accountRepository;
-    }
 
     public boolean checkEditAccess(Tag tag) {
         if (tag.getProject() == null) {

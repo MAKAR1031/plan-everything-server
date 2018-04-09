@@ -1,6 +1,6 @@
 package ru.migmak.planeverything.server.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.rest.webmvc.PersistentEntityResource;
 import org.springframework.data.rest.webmvc.PersistentEntityResourceAssembler;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
@@ -12,14 +12,10 @@ import ru.migmak.planeverything.server.service.ProjectsService;
 
 @RepositoryRestController
 @RequestMapping("/projects")
+@RequiredArgsConstructor
 public class ProjectsController {
 
-    private ProjectsService projectsService;
-
-    @Autowired
-    public ProjectsController(ProjectsService projectsService) {
-        this.projectsService = projectsService;
-    }
+    private final ProjectsService projectsService;
 
     @PatchMapping("/{id}/close")
     @ResponseBody

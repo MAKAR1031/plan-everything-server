@@ -1,6 +1,6 @@
 package ru.migmak.planeverything.server.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.migmak.planeverything.server.domain.Account;
@@ -10,13 +10,9 @@ import ru.migmak.planeverything.server.repository.AccountRepository;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class AccountService {
     private final AccountRepository repository;
-
-    @Autowired
-    public AccountService(AccountRepository repository) {
-        this.repository = repository;
-    }
 
     public Account setBlocked(Long id, boolean blocked) {
         Account account = repository.findById(id).orElseThrow(NotFoundException::new);

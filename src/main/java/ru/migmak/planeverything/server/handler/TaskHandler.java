@@ -1,7 +1,7 @@
 package ru.migmak.planeverything.server.handler;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.core.annotation.HandleBeforeCreate;
 import org.springframework.data.rest.core.annotation.HandleBeforeDelete;
 import org.springframework.data.rest.core.annotation.HandleBeforeSave;
@@ -23,22 +23,12 @@ import static ru.migmak.planeverything.server.domain.enums.TaskStatusCode.CREATE
 @Component
 @RepositoryEventHandler
 @Slf4j
+@RequiredArgsConstructor
 public class TaskHandler {
 
     private final AccountRepository accountRepository;
     private final TaskStatusRepository statusRepository;
     private final EventTypeRepository eventTypeRepository;
-
-    @Autowired
-    public TaskHandler(
-            AccountRepository accountRepository,
-            TaskStatusRepository statusRepository,
-            EventTypeRepository eventTypeRepository
-    ) {
-        this.accountRepository = accountRepository;
-        this.statusRepository = statusRepository;
-        this.eventTypeRepository = eventTypeRepository;
-    }
 
     @HandleBeforeCreate
     @Transactional

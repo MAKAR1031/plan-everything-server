@@ -1,6 +1,6 @@
 package ru.migmak.planeverything.server.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,15 +12,11 @@ import ru.migmak.planeverything.server.repository.ProjectRepository;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class ProjectsService {
-    private ProjectRepository projectRepository;
-    private AccountRepository accountRepository;
 
-    @Autowired
-    public ProjectsService(ProjectRepository projectRepository, AccountRepository accountRepository) {
-        this.projectRepository = projectRepository;
-        this.accountRepository = accountRepository;
-    }
+    private final ProjectRepository projectRepository;
+    private final AccountRepository accountRepository;
 
     public Project close(Long id) {
         Project project = projectRepository.findById(id).orElseThrow(NotFoundException::new);

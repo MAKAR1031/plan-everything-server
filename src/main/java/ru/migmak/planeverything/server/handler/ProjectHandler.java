@@ -1,7 +1,7 @@
 package ru.migmak.planeverything.server.handler;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.core.annotation.HandleBeforeCreate;
 import org.springframework.data.rest.core.annotation.RepositoryEventHandler;
 import org.springframework.stereotype.Component;
@@ -19,19 +19,11 @@ import static ru.migmak.planeverything.server.domain.enums.MemberRoleCode.PROJEC
 @RepositoryEventHandler
 @Component
 @Slf4j
+@RequiredArgsConstructor
 public class ProjectHandler {
 
     private final AccountRepository accountRepository;
     private final MemberRoleRepository memberRoleRepository;
-
-    @Autowired
-    public ProjectHandler(
-            AccountRepository accountRepository,
-            MemberRoleRepository memberRoleRepository
-    ) {
-        this.accountRepository = accountRepository;
-        this.memberRoleRepository = memberRoleRepository;
-    }
 
     @HandleBeforeCreate
     public void handleProjectCreate(Project project) {

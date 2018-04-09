@@ -1,6 +1,6 @@
 package ru.migmak.planeverything.server.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.rest.webmvc.PersistentEntityResource;
 import org.springframework.data.rest.webmvc.PersistentEntityResourceAssembler;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
@@ -12,14 +12,10 @@ import ru.migmak.planeverything.server.service.AccountService;
 
 @RepositoryRestController
 @RequestMapping("/accounts/{id}")
+@RequiredArgsConstructor
 public class AccountsController {
 
     private final AccountService accountService;
-
-    @Autowired
-    public AccountsController(AccountService accountService) {
-        this.accountService = accountService;
-    }
 
     @PostMapping("/block")
     @ResponseBody
