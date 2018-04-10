@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.migmak.planeverything.server.domain.*;
+import ru.migmak.planeverything.server.domain.enums.EventTypeCode;
 import ru.migmak.planeverything.server.domain.enums.TaskStatusCode;
 import ru.migmak.planeverything.server.exception.BadRequestException;
 import ru.migmak.planeverything.server.exception.NotFoundException;
@@ -13,12 +14,11 @@ import ru.migmak.planeverything.server.repository.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static ru.migmak.planeverything.server.domain.enums.EventTypeCode.FINISH;
 import static ru.migmak.planeverything.server.domain.enums.EventTypeCode.UPDATE;
-import static ru.migmak.planeverything.server.domain.enums.TaskStatusCode.ASSIGNED;
-import static ru.migmak.planeverything.server.domain.enums.TaskStatusCode.COMPLETED;
+import static ru.migmak.planeverything.server.domain.enums.TaskStatusCode.*;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class TasksService {
     private final AccountRepository accountRepository;
@@ -27,6 +27,7 @@ public class TasksService {
     private final EventTypeRepository eventTypeRepository;
     private final TaskStepRepository taskStepRepository;
 
+    @Transactional
     public Task assign(Long id, Long memberId) {
         Task task = taskRepository.findById(id).orElseThrow(NotFoundException::new);
         ProjectMember assignee = task.getProject()
@@ -44,11 +45,12 @@ public class TasksService {
                 .filter(member -> member.getAccount().getId().equals(currentAccount.getId()))
                 .findAny()
                 .orElseThrow(() -> new BadRequestException("User is not a member of the project"));
-        TaskEvent event = createUpdateEvent(task, initiator, "Task assigned");
+        TaskEvent event = createEvent(task, initiator, "Task assigned", UPDATE);
         task.addEvent(event);
         return taskRepository.save(task);
     }
 
+    @Transactional
     public Task startTask(Long id) {
         Task task = taskRepository.findById(id).orElseThrow(NotFoundException::new);
         Account currentAccount = getCurrentAccount();
@@ -58,23 +60,43 @@ public class TasksService {
                 .filter(member -> member.getAccount().getId().equals(currentAccount.getId()))
                 .findAny()
                 .orElseThrow(() -> new BadRequestException("Task not assigned to current user"));
-        TaskEvent event = createUpdateEvent(task, initiator, "Task execution started");
+        TaskEvent event = createEvent(task, initiator, "Task execution started", UPDATE);
         task.addEvent(event);
         TaskStatus status = getStatus(TaskStatusCode.IN_PROGRESS);
         task.setStatus(status);
         return taskRepository.save(task);
     }
 
+    @Transactional
+    public Task estimate(Long id) {
+        Task task = taskRepository.findById(id).orElseThrow(NotFoundException::new);
+        if (!task.getStatus().isFulfilled()) {
+            throw new BadRequestException("Task not fulfilled");
+        }
+        Account currentAccount = getCurrentAccount();
+        ProjectMember initiator = task.getAssignee();
+        if (!initiator.getAccount().getId().equals(currentAccount.getId())) {
+            throw new BadRequestException("Task not assigned to current user");
+        }
+        TaskStatus status = getStatus(COMPLETED);
+        TaskEvent event = createEvent(task, initiator, "Task complete", FINISH);
+        task.setStatus(status);
+        task.addEvent(event);
+        return taskRepository.save(task);
+    }
+
+    @Transactional
     public TaskStep completeStep(Long id, String report) {
         TaskStep step = taskStepRepository.findById(id).orElseThrow(NotFoundException::new);
         Account currentAccount = getCurrentAccount();
-        ProjectMember initiator = step.getTask().getProject()
-                .getMembers()
-                .stream()
-                .filter(member -> member.getAccount().getId().equals(currentAccount.getId()))
-                .findAny()
-                .orElseThrow(() -> new BadRequestException("Task not assigned to current user"));
-        TaskEvent event = createUpdateEvent(step.getTask(), initiator, "Step complete");
+        ProjectMember initiator = step.getTask().getAssignee();
+        if (initiator == null) {
+            throw new BadRequestException("Task not assigned");
+        }
+        if (!initiator.getAccount().getId().equals(currentAccount.getId())) {
+            throw new BadRequestException("Task not assigned to current user");
+        }
+        TaskEvent event = createEvent(step.getTask(), initiator, "Step complete", UPDATE);
         step.getTask().addEvent(event);
         List<Long> stepsIds = step.getTask()
                 .getSteps()
@@ -83,9 +105,9 @@ public class TasksService {
                 .map(TaskStep::getId)
                 .collect(Collectors.toList());
         if ((stepsIds.size() == 1) && stepsIds.get(0).equals(id)) {
-            TaskStatus status = getStatus(COMPLETED);
+            TaskStatus status = getStatus(FULFILLED);
             step.getTask().setStatus(status);
-            TaskEvent completeEvent = createUpdateEvent(step.getTask(), initiator, "All steps complete");
+            TaskEvent completeEvent = createEvent(step.getTask(), initiator, "Task fulfilled", UPDATE);
             step.getTask().addEvent(completeEvent);
         }
         step.setCompleted(true);
@@ -103,9 +125,9 @@ public class TasksService {
                 .orElseThrow(() -> new ServiceException(String.format("Task state %s not found", statusCode.name())));
     }
 
-    private TaskEvent createUpdateEvent(Task task, ProjectMember initiator, String name) {
-        EventType eventType = eventTypeRepository.findByCode(UPDATE.name())
-                .orElseThrow(() -> new ServiceException("Event type 'UPDATE' not found"));
+    private TaskEvent createEvent(Task task, ProjectMember initiator, String name, EventTypeCode typeCode) {
+        EventType eventType = eventTypeRepository.findByCode(typeCode.name())
+                .orElseThrow(() -> new ServiceException(String.format("Event type '%s' not found", typeCode.name())));
         return new TaskEvent(name, eventType, task, initiator);
     }
 

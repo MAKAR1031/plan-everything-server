@@ -28,13 +28,13 @@ public class CriterionHandler {
 
     @HandleBeforeSave
     public void handeUpdate(Criterion criterion) {
-        if (!criterion.getTask().getStatus().isCompleted()) {
-            if (criterion.getActualValue() != null) {
-                throw new BadRequestException("The actual value should not be specified in this state");
-            }
-        } else {
+        if (criterion.getTask().getStatus().isFulfilled()) {
             if (criterion.getActualValue() == null) {
                 throw new BadRequestException("The actual value should be specified");
+            }
+        } else {
+            if (criterion.getActualValue() != null) {
+                throw new BadRequestException("The actual value should not be specified in this state");
             }
         }
     }

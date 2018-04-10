@@ -51,6 +51,7 @@ public class TaskHandler {
     }
 
     @HandleBeforeSave
+    @Transactional
     public void handleUpdate(Task task) {
         checkEditableStatus(task);
         ProjectMember initiator = getEventInitiator(task.getProject());
@@ -59,6 +60,7 @@ public class TaskHandler {
     }
 
     @HandleBeforeDelete
+    @Transactional
     public void handleDelete(Task task) {
         checkEditableStatus(task);
         ProjectMember initiator = getEventInitiator(task.getProject());

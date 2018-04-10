@@ -4,7 +4,7 @@ public enum TaskStatusCode {
     CREATED,
     ASSIGNED,
     IN_PROGRESS,
-    COMPLETED,
     FULFILLED,
+    COMPLETED,
     REMOVED
 }

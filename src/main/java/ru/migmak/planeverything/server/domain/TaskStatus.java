@@ -5,8 +5,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
-import static ru.migmak.planeverything.server.domain.enums.TaskStatusCode.COMPLETED;
 import static ru.migmak.planeverything.server.domain.enums.TaskStatusCode.CREATED;
+import static ru.migmak.planeverything.server.domain.enums.TaskStatusCode.FULFILLED;
 
 @Getter
 @Setter
@@ -27,7 +27,7 @@ public class TaskStatus {
         return !CREATED.name().equals(code);
     }
 
-    public boolean isCompleted() {
-        return COMPLETED.name().equals(code);
+    public boolean isFulfilled() {
+        return FULFILLED.name().equals(code);
     }
 }

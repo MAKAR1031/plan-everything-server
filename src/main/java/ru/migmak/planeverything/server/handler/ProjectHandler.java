@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.rest.core.annotation.HandleBeforeCreate;
 import org.springframework.data.rest.core.annotation.RepositoryEventHandler;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import ru.migmak.planeverything.server.domain.Account;
 import ru.migmak.planeverything.server.domain.Project;
 import ru.migmak.planeverything.server.domain.ProjectMember;
@@ -26,6 +27,7 @@ public class ProjectHandler {
     private final MemberRoleRepository memberRoleRepository;
 
     @HandleBeforeCreate
+    @Transactional
     public void handleProjectCreate(Project project) {
         log.info("Create new project");
         project.setCreateDate(new Date());

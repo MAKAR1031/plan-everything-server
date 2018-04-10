@@ -29,4 +29,10 @@ public class TasksController {
     public PersistentEntityResource start(@PathVariable("id") Long id, PersistentEntityResourceAssembler assembler) {
         return assembler.toFullResource(tasksService.startTask(id));
     }
+
+    @PutMapping("/estimate")
+    @ResponseBody
+    public PersistentEntityResource estimate(@PathVariable("id") Long id, PersistentEntityResourceAssembler assembler) {
+        return assembler.toFullResource(tasksService.estimate(id));
+    }
 }
