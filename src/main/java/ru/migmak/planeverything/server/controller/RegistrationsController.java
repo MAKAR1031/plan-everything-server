@@ -14,7 +14,7 @@ public class RegistrationsController {
     private final AccountService accountService;
 
     @PostMapping
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.CREATED)
     public void register(@RequestBody AccountRegistration account) {
         accountService.register(account.toAccount());
     }
