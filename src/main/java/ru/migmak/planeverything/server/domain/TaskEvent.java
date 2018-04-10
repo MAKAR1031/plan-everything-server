@@ -1,5 +1,6 @@
 package ru.migmak.planeverything.server.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -27,6 +28,7 @@ public class TaskEvent {
 
     @ManyToOne
     @JoinColumn(name = "event_type_id", nullable = false)
+    @JsonIgnore
     private EventType type;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -43,5 +45,10 @@ public class TaskEvent {
         this.type = type;
         this.task = task;
         this.initiator = initiator;
+    }
+
+    @SuppressWarnings("unused")
+    public String getEventType() {
+        return this.type.getCode();
     }
 }

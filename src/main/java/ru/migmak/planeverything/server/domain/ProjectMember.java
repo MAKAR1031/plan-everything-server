@@ -28,6 +28,6 @@ public class ProjectMember {
     private MemberRole role;
 
     public boolean hasPrivilege(PrivilegeCode code) {
-        return role.getPrivilegeList().stream().anyMatch(privilege -> privilege.getCode().equals(code.name()));
+        return role.getPrivileges().stream().anyMatch(privilege -> privilege.getCode().equals(code.name()));
     }
 }

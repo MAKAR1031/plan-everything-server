@@ -1,5 +1,6 @@
 package ru.migmak.planeverything.server.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,6 +19,7 @@ public class MemberRole {
     @Column(nullable = false, unique = true, length = 80)
     private String name;
 
+    @JsonIgnore
     @Column(nullable = false, unique = true, length = 20)
     private String code;
 
@@ -27,5 +29,5 @@ public class MemberRole {
             joinColumns = @JoinColumn(name = "member_role_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "member_privilege_id", referencedColumnName = "id")
     )
-    private List<Privilege> privilegeList;
+    private List<Privilege> privileges;
 }

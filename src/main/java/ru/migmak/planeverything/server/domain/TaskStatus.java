@@ -1,5 +1,6 @@
 package ru.migmak.planeverything.server.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,12 +22,15 @@ public class TaskStatus {
     private String name;
 
     @Column(nullable = false, unique = true, length = 20)
+    @JsonIgnore
     private String code;
 
+    @JsonIgnore
     public boolean isEditable() {
         return !CREATED.name().equals(code);
     }
 
+    @JsonIgnore
     public boolean isFulfilled() {
         return FULFILLED.name().equals(code);
     }
