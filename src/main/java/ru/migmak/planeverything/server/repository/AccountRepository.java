@@ -11,6 +11,7 @@ public interface AccountRepository extends CrudRepository<Account, Long> {
     @RestResource(exported = false)
     Optional<Account> findAccountByLogin(String login);
 
+    @RestResource(path = "me")
     @Query("select a from Account a where a.login = :#{principal.username}")
     Optional<Account> findCurrentAccount();
 
