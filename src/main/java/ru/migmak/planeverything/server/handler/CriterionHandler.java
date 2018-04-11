@@ -17,6 +17,7 @@ import ru.migmak.planeverything.server.exception.BadRequestException;
 public class CriterionHandler {
 
     @HandleBeforeCreate
+    @SuppressWarnings("unused")
     public void handleCreate(Criterion criterion) {
         if (criterion.getTask().getStatus().isEditable()) {
             throw new BadRequestException("Task can edited only 'CREATED' state");
@@ -27,7 +28,8 @@ public class CriterionHandler {
     }
 
     @HandleBeforeSave
-    public void handeUpdate(Criterion criterion) {
+    @SuppressWarnings("unused")
+    public void handleUpdate(Criterion criterion) {
         if (criterion.getTask().getStatus().isFulfilled()) {
             if (criterion.getActualValue() == null) {
                 throw new BadRequestException("The actual value should be specified");

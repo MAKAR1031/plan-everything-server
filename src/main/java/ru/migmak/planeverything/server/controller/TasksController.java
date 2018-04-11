@@ -10,6 +10,7 @@ import ru.migmak.planeverything.server.service.TasksService;
 @RepositoryRestController
 @RequestMapping("/tasks/{id}")
 @RequiredArgsConstructor
+@SuppressWarnings("ConstantConditions")
 public class TasksController {
 
     private final TasksService tasksService;
