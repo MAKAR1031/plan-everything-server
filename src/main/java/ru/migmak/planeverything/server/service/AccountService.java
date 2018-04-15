@@ -39,4 +39,9 @@ public class AccountService {
         account.setBlocked(blocked);
         return accountRepository.save(account);
     }
+
+    public Account getCurrentAccount() {
+        return accountRepository.findCurrentAccount()
+                .orElseThrow(() -> new ServiceException("Current account not found"));
+    }
 }

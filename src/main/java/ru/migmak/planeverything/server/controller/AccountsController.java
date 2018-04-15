@@ -4,26 +4,29 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.rest.webmvc.PersistentEntityResource;
 import org.springframework.data.rest.webmvc.PersistentEntityResourceAssembler;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import ru.migmak.planeverything.server.service.AccountService;
 
 @RepositoryRestController
-@RequestMapping("/accounts/{id}")
+@RequestMapping("/accounts")
 @RequiredArgsConstructor
 public class AccountsController {
 
     private final AccountService accountService;
 
-    @PostMapping("/block")
+    @GetMapping("/me")
+    @ResponseBody
+    public PersistentEntityResource me(PersistentEntityResourceAssembler assembler) {
+        return assembler.toFullResource(accountService.getCurrentAccount());
+    }
+
+    @PostMapping("/{id}/block")
     @ResponseBody
     public PersistentEntityResource block(@PathVariable("id") Long id, PersistentEntityResourceAssembler assembler) {
         return assembler.toFullResource(accountService.setBlocked(id, true));
     }
 
-    @PostMapping("/unblock")
+    @PostMapping("/{id}/unlock")
     @ResponseBody
     public PersistentEntityResource unblock(@PathVariable("id") Long id, PersistentEntityResourceAssembler assembler) {
         return assembler.toFullResource(accountService.setBlocked(id, false));
