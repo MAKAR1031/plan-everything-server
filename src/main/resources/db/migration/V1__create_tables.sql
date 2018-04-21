@@ -85,6 +85,7 @@ CREATE TABLE tasks (
   id BIGSERIAL PRIMARY KEY NOT NULL,
   name VARCHAR(120) NOT NULL,
   description TEXT,
+  expected_complete_date DATE,
   task_state_id BIGINT NOT NULL,
   member_author_id BIGINT NOT NULL,
   member_assignee_id BIGINT,

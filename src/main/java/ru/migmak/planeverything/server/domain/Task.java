@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -20,6 +21,10 @@ public class Task {
     private String name;
 
     private String description;
+
+    @Column(name = "expected_complete_date")
+    @Temporal(TemporalType.DATE)
+    private Date expectedCompleteDate;
 
     @ManyToOne
     @JoinColumn(name = "task_state_id", nullable = false)
