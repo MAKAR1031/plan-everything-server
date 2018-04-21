@@ -92,7 +92,7 @@ CREATE TABLE tasks (
   project_id BIGINT NOT NULL,
   CONSTRAINT tasks_task_statuses_id_fk FOREIGN KEY (task_state_id) REFERENCES task_statuses (id) ON UPDATE CASCADE,
   CONSTRAINT tasks_accounts_author_id_fk FOREIGN KEY (member_author_id) REFERENCES members (id) ON UPDATE CASCADE,
-  CONSTRAINT tasks_accounts_assignee_id_fk FOREIGN KEY (member_assignee_id) REFERENCES members (id) ON UPDATE CASCADE,
+  CONSTRAINT tasks_accounts_assignee_id_fk FOREIGN KEY (member_assignee_id) REFERENCES members (id) ON UPDATE CASCADE ON DELETE SET NULL,
   CONSTRAINT tasks_project_id_fk FOREIGN KEY (project_id) REFERENCES projects (id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 CREATE INDEX tasks_name_index ON tasks (name);
