@@ -152,8 +152,8 @@ CREATE TABLE task_events (
   event_time TIMESTAMP NOT NULL,
   event_type_id BIGINT NOT NULL,
   task_id BIGINT NOT NULL,
-  member_id BIGINT NOT NULL,
+  initiator_id BIGINT NOT NULL,
   CONSTRAINT task_events_event_type_id_fk FOREIGN KEY (event_type_id) REFERENCES event_types (id),
   CONSTRAINT task_events_tasks_id_fk FOREIGN KEY (task_id) REFERENCES tasks (id) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT task_events_members_id_fk FOREIGN KEY (member_id) REFERENCES members (id) ON DELETE SET NULL ON UPDATE CASCADE
+  CONSTRAINT task_events_accounts_id_fk FOREIGN KEY (initiator_id) REFERENCES accounts (id) ON DELETE RESTRICT ON UPDATE CASCADE
 );

@@ -38,7 +38,8 @@ public class TaskResourceProcessor implements ResourceProcessor<Resource<Task>> 
         if ((statusCode.equals(CREATED.name()) || statusCode.equals(ASSIGNED.name())) && member.hasPrivilege(MANAGE_TASKS)) {
             resource.add(linkTo(methodOn(TasksController.class).assign(task.getId(), null, null)).withRel("assign"));
         }
-        if (!task.getAssignee().getAccount().getId().equals(account.getId())) {
+        ProjectMember assignee = task.getAssignee();
+        if (assignee == null || !assignee.getAccount().getId().equals(account.getId())) {
             return resource;
         }
         if (statusCode.equals(ASSIGNED.name())) {

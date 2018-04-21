@@ -36,10 +36,10 @@ public class TaskEvent {
     private Task task;
 
     @ManyToOne
-    @JoinColumn(name = "member_id", nullable = false)
-    private ProjectMember initiator;
+    @JoinColumn(name = "initiator_id", nullable = false)
+    private Account initiator;
 
-    public TaskEvent(String name, EventType type, Task task, ProjectMember initiator) {
+    public TaskEvent(String name, EventType type, Task task, Account initiator) {
         this.time = new Date();
         this.name = name;
         this.type = type;

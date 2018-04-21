@@ -41,12 +41,12 @@ public class TaskHandler {
         TaskStatus createdStatus = statusRepository.findByCode(CREATED.name())
                 .orElseThrow(() -> new ServiceException("Status 'CREATE' not found"));
         task.setStatus(createdStatus);
-        ProjectMember author = getEventInitiator(project);
+        ProjectMember author = getCurrentProjectMember(project);
         if (!author.hasPrivilege(MANAGE_TASKS)) {
             throw new BadRequestException("You can not manage tasks");
         }
         task.setAuthor(author);
-        TaskEvent event = new TaskEvent("Created", getEventType(CREATE), task, author);
+        TaskEvent event = new TaskEvent("Created", getEventType(CREATE), task, author.getAccount());
         task.addEvent(event);
     }
 
@@ -54,8 +54,7 @@ public class TaskHandler {
     @Transactional
     public void handleUpdate(Task task) {
         checkEditableStatus(task);
-        ProjectMember initiator = getEventInitiator(task.getProject());
-        TaskEvent event = new TaskEvent("Task updated", getEventType(UPDATE), task, initiator);
+        TaskEvent event = new TaskEvent("Task updated", getEventType(UPDATE), task, getCurrentAccount());
         task.addEvent(event);
     }
 
@@ -63,8 +62,7 @@ public class TaskHandler {
     @Transactional
     public void handleDelete(Task task) {
         checkEditableStatus(task);
-        ProjectMember initiator = getEventInitiator(task.getProject());
-        TaskEvent event = new TaskEvent("Task removed", getEventType(FINISH), task, initiator);
+        TaskEvent event = new TaskEvent("Task removed", getEventType(FINISH), task, getCurrentAccount());
         task.addEvent(event);
     }
 
@@ -73,14 +71,18 @@ public class TaskHandler {
                 .orElseThrow(() -> new ServiceException(String.format("Event type '%s' not found", code.name())));
     }
 
-    private ProjectMember getEventInitiator(Project project) {
-        Account currentAccount = accountRepository.findCurrentAccount()
-                .orElseThrow(() -> new ServiceException("Current account not found"));
+    private ProjectMember getCurrentProjectMember(Project project) {
+        Account currentAccount = getCurrentAccount();
         return project.getMembers()
                 .stream()
                 .filter(member -> member.getAccount().getId().equals(currentAccount.getId()))
                 .findAny()
                 .orElseThrow(() -> new BadRequestException("User is not a member of the project"));
+    }
+
+    private Account getCurrentAccount() {
+        return accountRepository.findCurrentAccount()
+                .orElseThrow(() -> new ServiceException("Current account not found"));
     }
 
     private void checkEditableStatus(Task task) {

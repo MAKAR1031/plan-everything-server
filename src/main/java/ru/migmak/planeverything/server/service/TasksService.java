@@ -128,7 +128,7 @@ public class TasksService {
     private TaskEvent createEvent(Task task, ProjectMember initiator, String name, EventTypeCode typeCode) {
         EventType eventType = eventTypeRepository.findByCode(typeCode.name())
                 .orElseThrow(() -> new ServiceException(String.format("Event type '%s' not found", typeCode.name())));
-        return new TaskEvent(name, eventType, task, initiator);
+        return new TaskEvent(name, eventType, task, initiator.getAccount());
     }
 
     private Account getCurrentAccount() {
