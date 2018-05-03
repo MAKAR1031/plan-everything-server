@@ -1,6 +1,6 @@
 package ru.migmak.planeverything.server.configuration;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -12,14 +12,10 @@ import ru.migmak.planeverything.server.service.AccountDetailsService;
 
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
+@RequiredArgsConstructor
 public class SecurityConfiguration {
 
     private final AccountDetailsService accountDetailsService;
-
-    @Autowired
-    public SecurityConfiguration(AccountDetailsService accountDetailsService) {
-        this.accountDetailsService = accountDetailsService;
-    }
 
     @Bean
     public DaoAuthenticationProvider authProvider(PasswordEncoder encoder) {
