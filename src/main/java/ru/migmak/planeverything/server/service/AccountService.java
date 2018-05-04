@@ -44,4 +44,8 @@ public class AccountService {
         return accountRepository.findCurrentAccount()
                 .orElseThrow(() -> new ServiceException("Current account not found"));
     }
+
+    public Account findByLogin(String login) {
+        return accountRepository.findAccountByLogin(login).orElse(null);
+    }
 }

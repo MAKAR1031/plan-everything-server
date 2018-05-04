@@ -13,5 +13,7 @@ public interface AccountWithRoleProjection {
 
     String getFullName();
 
+    boolean isBlocked();
+
     AccountRole getRole();
 }
