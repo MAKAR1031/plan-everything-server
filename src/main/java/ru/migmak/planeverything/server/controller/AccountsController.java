@@ -20,15 +20,15 @@ public class AccountsController {
         return assembler.toFullResource(accountService.getCurrentAccount());
     }
 
-    @PostMapping("/{id}/block")
+    @PostMapping("/{id}/lock")
     @ResponseBody
-    public PersistentEntityResource block(@PathVariable("id") Long id, PersistentEntityResourceAssembler assembler) {
+    public PersistentEntityResource lock(@PathVariable("id") Long id, PersistentEntityResourceAssembler assembler) {
         return assembler.toFullResource(accountService.setBlocked(id, true));
     }
 
     @PostMapping("/{id}/unlock")
     @ResponseBody
-    public PersistentEntityResource unblock(@PathVariable("id") Long id, PersistentEntityResourceAssembler assembler) {
+    public PersistentEntityResource unlock(@PathVariable("id") Long id, PersistentEntityResourceAssembler assembler) {
         return assembler.toFullResource(accountService.setBlocked(id, false));
     }
 }
