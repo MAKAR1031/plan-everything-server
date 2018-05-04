@@ -33,6 +33,10 @@ public class AccountService {
 
     public Account setBlocked(Long id, boolean blocked) {
         Account account = accountRepository.findById(id).orElseThrow(NotFoundException::new);
+        Account currentAccount = getCurrentAccount();
+        if (account.getId().equals(currentAccount.getId())) {
+            throw new BadRequestException("You can't change lock status for your account");
+        }
         if (account.isBlocked() == blocked) {
             throw new BadRequestException(blocked ? "Account already blocked" : "Account already unlocked");
         }
