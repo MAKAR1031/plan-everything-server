@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.migmak.planeverything.server.domain.Account;
 import ru.migmak.planeverything.server.domain.Project;
 import ru.migmak.planeverything.server.domain.ProjectMember;
+import ru.migmak.planeverything.server.domain.enums.PrivilegeCode;
+import ru.migmak.planeverything.server.exception.BadRequestException;
 import ru.migmak.planeverything.server.service.AccountService;
 
 @Component
@@ -17,6 +19,7 @@ import ru.migmak.planeverything.server.service.AccountService;
 @RequiredArgsConstructor
 public class ProjectResourceProcessor implements ResourceProcessor<Resource<Project>> {
 
+    private static final String MANAGE_TAGS = "manageTags";
     private final AccountService accountService;
     private final RepositoryEntityLinks links;
 
@@ -28,7 +31,14 @@ public class ProjectResourceProcessor implements ResourceProcessor<Resource<Proj
                 .filter(m -> m.getAccount().getId().equals(currentAccount.getId()))
                 .findFirst()
                 .ifPresent(m -> projectResource.add(createLinkToMember(m)));
-
+        ProjectMember currentMember = project.getMembers()
+                .stream()
+                .filter(member -> member.getAccount().getId().equals(currentAccount.getId()))
+                .findAny()
+                .orElseThrow(() -> new BadRequestException("User is not a member of the project"));
+        if (currentMember.hasPrivilege(PrivilegeCode.MANAGE_TAGS)) {
+            projectResource.add(new Link(MANAGE_TAGS, MANAGE_TAGS));
+        }
         return projectResource;
     }
 
