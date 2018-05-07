@@ -20,6 +20,8 @@ import ru.migmak.planeverything.server.service.AccountService;
 public class ProjectResourceProcessor implements ResourceProcessor<Resource<Project>> {
 
     private static final String MANAGE_TAGS = "manageTags";
+    private static final String MANAGE_MEMBERS = "manageMembers";
+    private static final String MANAGE_HREF = "manage";
     private final AccountService accountService;
     private final RepositoryEntityLinks links;
 
@@ -37,7 +39,10 @@ public class ProjectResourceProcessor implements ResourceProcessor<Resource<Proj
                 .findAny()
                 .orElseThrow(() -> new BadRequestException("User is not a member of the project"));
         if (currentMember.hasPrivilege(PrivilegeCode.MANAGE_TAGS)) {
-            projectResource.add(new Link(MANAGE_TAGS, MANAGE_TAGS));
+            projectResource.add(new Link(MANAGE_HREF, MANAGE_TAGS));
+        }
+        if (currentMember.hasPrivilege(PrivilegeCode.MANAGE_MEMBERS)) {
+            projectResource.add(new Link(MANAGE_HREF, MANAGE_MEMBERS));
         }
         return projectResource;
     }
