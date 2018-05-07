@@ -5,10 +5,14 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.migmak.planeverything.server.domain.Project;
+import ru.migmak.planeverything.server.domain.ProjectMember;
 import ru.migmak.planeverything.server.exception.NotFoundException;
 import ru.migmak.planeverything.server.exception.ProjectAlreadyClosedException;
 import ru.migmak.planeverything.server.repository.AccountRepository;
 import ru.migmak.planeverything.server.repository.ProjectRepository;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -30,5 +34,9 @@ public class ProjectsService {
         }
         project.setOpened(false);
         return projectRepository.save(project);
+    }
+
+    public List<Long> accountMemberIds(Project project) {
+        return project.getMembers().stream().map(ProjectMember::getId).collect(Collectors.toList());
     }
 }
