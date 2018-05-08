@@ -48,7 +48,12 @@ public class Task {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "task")
     private List<Criterion> criteria;
 
-    @ManyToMany(mappedBy = "project")
+    @ManyToMany
+    @JoinTable(
+            name = "task_tag",
+            joinColumns = @JoinColumn(name = "task_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id", referencedColumnName = "id")
+    )
     private List<Tag> tags;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "task")
