@@ -13,9 +13,9 @@ import java.util.List;
 @SuppressWarnings("unused")
 public interface FullTaskProjection {
 
-    FullProjectMemberProjection getAuthor();
+    FullMemberProjection getAuthor();
 
-    FullProjectMemberProjection getAssignee();
+    FullMemberProjection getAssignee();
 
     @Value("#{target.status.name}")
     String getStatus();

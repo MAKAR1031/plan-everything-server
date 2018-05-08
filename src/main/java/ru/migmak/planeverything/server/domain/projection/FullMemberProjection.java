@@ -6,7 +6,9 @@ import ru.migmak.planeverything.server.domain.Account;
 import ru.migmak.planeverything.server.domain.ProjectMember;
 
 @Projection(name = "full", types = ProjectMember.class)
-public interface FullProjectMemberProjection {
+public interface FullMemberProjection {
+
+    Long getId();
 
     Account getAccount();
 
