@@ -27,6 +27,6 @@ public interface AccountRepository extends CrudRepository<Account, Long> {
     void deleteAll();
 
     @RestResource(path = "nonInProject", rel = "nonInProject")
-    @Query("select a from Account a where a.id in :#{@projectsService.accountMemberIds(#project)} and a.role.code <> 'ADMIN'")
+    @Query("select a from Account a where a.id not in :#{@projectsService.accountMemberIds(#project)} and a.role.code <> 'ADMIN'")
     List<Account> findNonProject(@Param("project") Project project);
 }

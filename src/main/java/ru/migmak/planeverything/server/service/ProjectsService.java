@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.migmak.planeverything.server.domain.Account;
 import ru.migmak.planeverything.server.domain.Project;
 import ru.migmak.planeverything.server.domain.ProjectMember;
 import ru.migmak.planeverything.server.exception.NotFoundException;
@@ -37,6 +38,10 @@ public class ProjectsService {
     }
 
     public List<Long> accountMemberIds(Project project) {
-        return project.getMembers().stream().map(ProjectMember::getId).collect(Collectors.toList());
+        return project.getMembers()
+                .stream()
+                .map(ProjectMember::getAccount)
+                .map(Account::getId)
+                .collect(Collectors.toList());
     }
 }
