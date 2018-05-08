@@ -7,18 +7,24 @@ import ru.migmak.planeverything.server.domain.Tag;
 import ru.migmak.planeverything.server.domain.Task;
 import ru.migmak.planeverything.server.domain.TaskStep;
 
+import java.util.Date;
 import java.util.List;
 
 @Projection(name = "full", types = Task.class)
 @SuppressWarnings("unused")
 public interface FullTaskProjection {
+    String getName();
+
+    String getDescription();
+
+    Date getExpectedCompleteDate();
+
+    @Value("#{target.status.name}")
+    String getStatus();
 
     FullMemberProjection getAuthor();
 
     FullMemberProjection getAssignee();
-
-    @Value("#{target.status.name}")
-    String getStatus();
 
     List<Tag> getTags();
 
