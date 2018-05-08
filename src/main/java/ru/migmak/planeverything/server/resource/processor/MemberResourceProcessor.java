@@ -37,6 +37,7 @@ public class MemberResourceProcessor implements ResourceProcessor<Resource<FullM
                 .orElseThrow(() -> new BadRequestException("User is not a member of the project"));
         if (!currentMember.getId().equals(member.getId()) && currentMember.hasPrivilege(PrivilegeCode.MANAGE_MEMBERS)) {
             resource.add(links.linkToSingleResource(ProjectMember.class, member.getId()).withRel("exclude"));
+            resource.add(links.linkToSingleResource(ProjectMember.class, member.getId()).withRel("changeRole"));
         }
         return resource;
     }
