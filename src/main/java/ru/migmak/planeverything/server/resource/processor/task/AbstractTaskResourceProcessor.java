@@ -33,6 +33,7 @@ public abstract class AbstractTaskResourceProcessor {
         String statusCode = task.getStatus().getCode();
         if (statusCode.equals(CREATED.name()) && member.hasPrivilege(MANAGE_TASKS)) {
             resource.add(links.linkToSingleResource(Task.class, task.getId()).withRel("edit"));
+            resource.add(links.linkToSingleResource(Task.class, task.getId()).withRel("delete"));
         }
         if ((statusCode.equals(CREATED.name()) || statusCode.equals(ASSIGNED.name())) &&
                 member.hasPrivilege(MANAGE_TASKS)) {
