@@ -18,7 +18,7 @@ public class Criterion {
     private String name;
 
     @Column(name = "expected_value", nullable = false)
-    private Integer exceptedValue;
+    private Integer expectedValue;
 
     @Column(name = "actual_value")
     private Integer actualValue;
