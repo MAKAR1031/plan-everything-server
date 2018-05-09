@@ -13,6 +13,9 @@ import java.util.List;
 @Projection(name = "full", types = Task.class)
 @SuppressWarnings("unused")
 public interface FullTaskProjection {
+
+    Long getId();
+
     String getName();
 
     String getDescription();
