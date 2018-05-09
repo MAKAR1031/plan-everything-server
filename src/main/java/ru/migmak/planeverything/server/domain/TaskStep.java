@@ -17,6 +17,9 @@ public class TaskStep {
     @Column(nullable = false)
     private String name;
 
+    @Column(name = "step_order", nullable = false)
+    private Integer order;
+
     @Column(nullable = false)
     private boolean completed;
 

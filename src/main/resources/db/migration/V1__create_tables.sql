@@ -120,6 +120,7 @@ CREATE TABLE task_tag (
 CREATE TABLE task_steps (
   id BIGSERIAL NOT NULL,
   name VARCHAR(120) NOT NULL,
+  step_order INT NOT NULL,
   completed BOOLEAN DEFAULT FALSE  NOT NULL,
   need_report BOOLEAN DEFAULT FALSE NOT NULL,
   report TEXT,
@@ -132,6 +133,7 @@ CREATE INDEX task_steps_name_index ON task_steps (name);
 CREATE TABLE criteria (
   id BIGSERIAL PRIMARY KEY NOT NULL,
   name VARCHAR(120) NOT NULL,
+  criterion_order INT NOT NULL,
   expected_value INT NOT NULL,
   actual_value INT,
   task_id BIGINT NOT NULL,

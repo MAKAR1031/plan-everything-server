@@ -17,6 +17,9 @@ public class Criterion {
     @Column(nullable = false, length = 120)
     private String name;
 
+    @Column(name = "criterion_order", nullable = false)
+    private Integer order;
+
     @Column(name = "expected_value", nullable = false)
     private Integer expectedValue;
 
