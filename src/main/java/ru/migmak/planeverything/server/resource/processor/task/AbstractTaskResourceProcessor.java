@@ -29,6 +29,7 @@ public abstract class AbstractTaskResourceProcessor {
         if (member == null) {
             return;
         }
+        resource.add(linkTo(methodOn(TasksController.class).updateInfo(task.getId())).withRel("updateInfo"));
         String statusCode = task.getStatus().getCode();
         if (statusCode.equals(CREATED.name()) && member.hasPrivilege(MANAGE_TASKS)) {
             resource.add(links.linkToSingleResource(Task.class, task.getId()).withRel("edit"));

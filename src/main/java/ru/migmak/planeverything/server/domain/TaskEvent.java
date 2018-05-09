@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ru.migmak.planeverything.server.domain.enums.EventTypeCode;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -48,7 +49,12 @@ public class TaskEvent {
     }
 
     @SuppressWarnings("unused")
+    @JsonIgnore
     public String getEventType() {
         return this.type.getCode();
+    }
+
+    public boolean is(EventTypeCode code) {
+        return code.name().equals(this.type.getCode());
     }
 }

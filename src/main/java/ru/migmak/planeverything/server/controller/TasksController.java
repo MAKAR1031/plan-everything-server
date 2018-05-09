@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.rest.webmvc.PersistentEntityResource;
 import org.springframework.data.rest.webmvc.PersistentEntityResourceAssembler;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
+import org.springframework.hateoas.ResourceSupport;
 import org.springframework.web.bind.annotation.*;
 import ru.migmak.planeverything.server.service.TasksService;
 
@@ -35,5 +36,11 @@ public class TasksController {
     @ResponseBody
     public PersistentEntityResource estimate(@PathVariable("id") Long id, PersistentEntityResourceAssembler assembler) {
         return assembler.toFullResource(tasksService.estimate(id));
+    }
+
+    @GetMapping("/updateInfo")
+    @ResponseBody
+    public ResourceSupport updateInfo(@PathVariable("id") Long id) {
+        return tasksService.getUpdateInfo(id);
     }
 }

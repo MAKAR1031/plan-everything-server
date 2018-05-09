@@ -1,6 +1,7 @@
 package ru.migmak.planeverything.server.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.rest.webmvc.support.RepositoryEntityLinks;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.migmak.planeverything.server.domain.*;
@@ -11,11 +12,12 @@ import ru.migmak.planeverything.server.exception.NotFoundException;
 import ru.migmak.planeverything.server.exception.ServiceException;
 import ru.migmak.planeverything.server.repository.*;
 
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static ru.migmak.planeverything.server.domain.enums.EventTypeCode.FINISH;
-import static ru.migmak.planeverything.server.domain.enums.EventTypeCode.UPDATE;
+import static ru.migmak.planeverything.server.domain.enums.EventTypeCode.*;
 import static ru.migmak.planeverything.server.domain.enums.TaskStatusCode.*;
 
 @Service
@@ -26,6 +28,7 @@ public class TasksService {
     private final TaskStatusRepository statusRepository;
     private final EventTypeRepository eventTypeRepository;
     private final TaskStepRepository taskStepRepository;
+    private final RepositoryEntityLinks links;
 
     @Transactional
     public Task assign(Long id, Long memberId) {
@@ -134,5 +137,31 @@ public class TasksService {
     private Account getCurrentAccount() {
         return accountRepository.findCurrentAccount()
                 .orElseThrow(() -> new ServiceException("Current account not found"));
+    }
+
+    public TaskUpdateInfo getUpdateInfo(Long id) {
+        Task task = taskRepository.findById(id).orElseThrow(NotFoundException::new);
+        Date createTime = task.getEvents()
+                .stream()
+                .filter(e -> e.is(CREATE))
+                .findFirst()
+                .map(TaskEvent::getTime)
+                .orElse(null);
+        Date updateTime = task.getEvents()
+                .stream()
+                .filter(e -> e.is(UPDATE))
+                .max(Comparator.comparing(TaskEvent::getTime))
+                .map(TaskEvent::getTime)
+                .orElse(null);
+        Date finishTime = task.getEvents()
+                .stream()
+                .filter(e -> e.is(FINISH))
+                .findFirst()
+                .map(TaskEvent::getTime)
+                .orElse(null);
+
+        TaskUpdateInfo updateInfo = TaskUpdateInfo.of(createTime, updateTime, finishTime);
+        updateInfo.add(links.linkToSingleResource(Task.class, id).withRel("task"));
+        return updateInfo;
     }
 }
