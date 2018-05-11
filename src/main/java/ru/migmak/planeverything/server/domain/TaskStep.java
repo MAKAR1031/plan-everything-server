@@ -26,7 +26,6 @@ public class TaskStep {
     @Column(nullable = false)
     private boolean needReport;
 
-    @Lob
     private String report;
 
     @ManyToOne
