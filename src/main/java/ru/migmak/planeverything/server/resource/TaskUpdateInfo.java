@@ -1,4 +1,4 @@
-package ru.migmak.planeverything.server.domain;
+package ru.migmak.planeverything.server.resource;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

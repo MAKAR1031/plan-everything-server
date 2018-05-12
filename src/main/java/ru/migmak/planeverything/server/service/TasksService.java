@@ -11,6 +11,7 @@ import ru.migmak.planeverything.server.exception.BadRequestException;
 import ru.migmak.planeverything.server.exception.NotFoundException;
 import ru.migmak.planeverything.server.exception.ServiceException;
 import ru.migmak.planeverything.server.repository.*;
+import ru.migmak.planeverything.server.resource.TaskUpdateInfo;
 
 import java.util.Comparator;
 import java.util.Date;
