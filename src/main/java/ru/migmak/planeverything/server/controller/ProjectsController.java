@@ -4,10 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.rest.webmvc.PersistentEntityResource;
 import org.springframework.data.rest.webmvc.PersistentEntityResourceAssembler;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.hateoas.ResourceSupport;
+import org.springframework.web.bind.annotation.*;
 import ru.migmak.planeverything.server.service.ProjectsService;
 
 @RepositoryRestController
@@ -21,5 +19,11 @@ public class ProjectsController {
     @ResponseBody
     public PersistentEntityResource close(@PathVariable("id") Long id, PersistentEntityResourceAssembler assembler) {
         return assembler.toFullResource(projectsService.close(id));
+    }
+
+    @GetMapping("/{id}/progress")
+    @ResponseBody
+    public ResourceSupport getProgress(@PathVariable("id") Long id) {
+        return projectsService.getStatistics(id);
     }
 }

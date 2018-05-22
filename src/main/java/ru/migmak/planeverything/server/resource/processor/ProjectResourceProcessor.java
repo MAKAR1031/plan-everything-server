@@ -7,12 +7,16 @@ import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.ResourceProcessor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import ru.migmak.planeverything.server.controller.ProjectsController;
 import ru.migmak.planeverything.server.domain.Account;
 import ru.migmak.planeverything.server.domain.Project;
 import ru.migmak.planeverything.server.domain.ProjectMember;
 import ru.migmak.planeverything.server.domain.enums.PrivilegeCode;
 import ru.migmak.planeverything.server.exception.BadRequestException;
 import ru.migmak.planeverything.server.service.AccountService;
+
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 @Component
 @Transactional
@@ -39,6 +43,7 @@ public class ProjectResourceProcessor implements ResourceProcessor<Resource<Proj
                 .filter(member -> member.getAccount().getId().equals(currentAccount.getId()))
                 .findAny()
                 .orElseThrow(() -> new BadRequestException("User is not a member of the project"));
+        resource.add(linkTo(methodOn(ProjectsController.class).getProgress(project.getId())).withRel("progress"));
         if (currentMember.hasPrivilege(PrivilegeCode.MANAGE_TAGS)) {
             resource.add(new Link(MANAGE_HREF, MANAGE_TAGS));
         }

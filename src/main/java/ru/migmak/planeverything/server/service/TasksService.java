@@ -161,7 +161,7 @@ public class TasksService {
                 .map(TaskEvent::getTime)
                 .orElse(null);
 
-        TaskUpdateInfo updateInfo = TaskUpdateInfo.of(createTime, updateTime, finishTime);
+        TaskUpdateInfo updateInfo = new TaskUpdateInfo(createTime, updateTime, finishTime);
         updateInfo.add(links.linkToSingleResource(Task.class, id).withRel("task"));
         return updateInfo;
     }
