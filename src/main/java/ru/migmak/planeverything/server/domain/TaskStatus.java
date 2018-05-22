@@ -3,6 +3,7 @@ package ru.migmak.planeverything.server.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
+import ru.migmak.planeverything.server.domain.enums.TaskStatusCode;
 
 import javax.persistence.*;
 
@@ -24,18 +25,22 @@ public class TaskStatus {
     @JsonIgnore
     private String code;
 
+    public boolean is(TaskStatusCode code) {
+        return this.code.equals(code.name());
+    }
+
     @JsonIgnore
     public boolean isEditable() {
-        return !CREATED.name().equals(code);
+        return !is(CREATED);
     }
 
     @JsonIgnore
     public boolean isFulfilled() {
-        return FULFILLED.name().equals(code);
+        return is(FULFILLED);
     }
 
     @JsonIgnore
     public boolean isInProgress() {
-        return IN_PROGRESS.name().equals(code);
+        return is(IN_PROGRESS);
     }
 }
